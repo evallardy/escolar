@@ -1,0 +1,50 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0"><i class="bi bi-journal-text"></i> Mis tareas</h5>
+    <a href="{% url 'portal:docente_tarea_crear' %}" data-modal-link class="btn btn-primary btn-sm">
+      <i class="bi bi-plus-lg"></i> Agregar tarea
+    </a>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Grupo</th>
+          <th>Entrega</th>
+          <th>Activa</th>
+          <th class="text-end">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tarea in tareas %}
+        <tr>
+          <td>{{ tarea.titulo }}</td>
+          <td>{{ tarea.grupo }}</td>
+          <td>{{ tarea.fecha_entrega|date:"d/m/Y H:i" }}</td>
+          <td>
+            {% if tarea.activa %}<span class="badge bg-success">Sí</span>{% else %}<span class="badge bg-secondary">No</span>{% endif %}
+          </td>
+          <td class="text-end">
+            <a href="{% url 'portal:docente_entregas_lista' tarea.pk %}" data-ajax-link data-target="#app-content" class="btn btn-sm btn-outline-primary" title="Ver entregas">
+              <i class="bi bi-inbox"></i>
+            </a>
+            <a href="{% url 'portal:docente_tarea_editar' tarea.pk %}" data-modal-link class="btn btn-sm btn-outline-secondary" title="Editar">
+              <i class="bi bi-pencil"></i>
+            </a>
+            <form method="post" action="{% url 'portal:docente_tarea_eliminar' tarea.pk %}"
+                  data-ajax-json-form data-confirm="¿Eliminar esta tarea? También se eliminarán sus entregas."
+                  data-refresh-url="{% url 'portal:docente_tareas_lista' %}" data-refresh-target="#lista-tareas"
+                  class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center text-muted py-4">No tienes tareas registradas todavía.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>

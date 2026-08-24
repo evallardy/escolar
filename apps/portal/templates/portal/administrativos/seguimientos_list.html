@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Seguimiento de incidencia{% endblock %}
+{% block content %}
+<div id="lista-seguimientos" data-incidencia-pk="{{ incidencia.pk }}">
+  {% include "portal/administrativos/partials/_seguimientos_tabla.html" %}
+</div>
+{% endblock %}

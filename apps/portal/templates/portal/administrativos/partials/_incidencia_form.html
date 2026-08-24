@@ -1,0 +1,6 @@
+{% extends "partials/_modal_form_base.html" %}
+{% block titulo %}{% if form.instance.pk %}Editar incidencia{% else %}Nueva incidencia{% endif %}{% endblock %}
+{% block form_action %}{% if form.instance.pk %}{% url 'portal:admin_incidencia_editar' form.instance.pk %}{% else %}{% url 'portal:admin_incidencia_crear' %}{% endif %}{% endblock %}
+{% block form_enctype %}multipart/form-data{% endblock %}
+{% block refresh_url %}{% url 'portal:admin_incidencias_lista' %}{% endblock %}
+{% block refresh_target %}#lista-incidencias{% endblock %}

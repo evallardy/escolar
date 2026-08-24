@@ -109,4 +109,102 @@
       document.getElementById("sidebar")?.classList.toggle("show");
     }
   });
+
+  /**
+   * Patrón CRUD genérico (lista + agregar + editar/eliminar por renglón),
+   * usado por todas las pantallas de gestión del portal:
+   *
+   *   - <a data-modal-link href="...">                 -> abre #modal-crud y
+   *     carga el formulario (create/update) vía GET AJAX.
+   *   - <form data-ajax-json-form data-refresh-url="..." data-refresh-target="#selector"
+   *           data-confirm="¿Seguro?">                 -> envía por POST; si el
+   *     backend responde JSON {"ok": true} cierra el modal (si estaba abierto)
+   *     y refresca data-refresh-target con el contenido de data-refresh-url;
+   *     si responde HTML (errores de validación), lo vuelve a mostrar en el
+   *     mismo lugar (dentro del modal o en el contenedor original).
+   */
+
+  function obtenerModal() {
+    const modalEl = document.getElementById("modal-crud");
+    if (!modalEl || typeof bootstrap === "undefined") return null;
+    return bootstrap.Modal.getOrCreateInstance(modalEl);
+  }
+
+  async function abrirModalAjax(url) {
+    const body = document.getElementById("modal-crud-body");
+    if (!body) return;
+    body.innerHTML =
+      '<div class="text-center p-5"><div class="spinner-border" role="status"></div></div>';
+    const modal = obtenerModal();
+    if (modal) modal.show();
+    try {
+      const resp = await fetch(url, { headers: AJAX_HEADER, credentials: "same-origin" });
+      body.innerHTML = await resp.text();
+    } catch (err) {
+      console.error("Error al cargar el formulario:", err);
+      body.innerHTML =
+        '<div class="modal-body"><div class="alert alert-danger mb-0">No se pudo cargar el formulario.</div></div>';
+    }
+  }
+
+  async function enviarFormJsonAjax(form) {
+    const url = form.getAttribute("action") || window.location.pathname;
+    const formData = new FormData(form);
+    const refreshUrl = form.getAttribute("data-refresh-url");
+    const refreshTarget = form.getAttribute("data-refresh-target") || "#app-content";
+
+    let resp;
+    try {
+      resp = await fetch(url, {
+        method: "POST",
+        headers: Object.assign({}, AJAX_HEADER, CSRF_TOKEN ? { "X-CSRFToken": CSRF_TOKEN } : {}),
+        credentials: "same-origin",
+        body: formData,
+      });
+    } catch (err) {
+      console.error("Error al enviar formulario:", err);
+      form.submit();
+      return;
+    }
+
+    const contentType = resp.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+      const datos = await resp.json();
+      if (datos.ok) {
+        const modal = obtenerModal();
+        if (modal) modal.hide();
+        if (refreshUrl) {
+          await navegarAjax(refreshUrl, refreshTarget, false);
+        }
+        return;
+      }
+    }
+
+    // No fue un JSON de éxito: es el formulario re-renderizado con errores.
+    const html = await resp.text();
+    const modalBody = document.getElementById("modal-crud-body");
+    if (modalBody && modalBody.contains(form)) {
+      modalBody.innerHTML = html;
+    } else {
+      reemplazarContenedor(refreshTarget, html);
+    }
+  }
+
+  document.addEventListener("click", function (evento) {
+    const modalLink = evento.target.closest("[data-modal-link]");
+    if (!modalLink) return;
+    evento.preventDefault();
+    abrirModalAjax(modalLink.getAttribute("href"));
+  });
+
+  document.addEventListener("submit", function (evento) {
+    const jsonForm = evento.target.closest("[data-ajax-json-form]");
+    if (!jsonForm) return;
+    evento.preventDefault();
+    const mensajeConfirmacion = jsonForm.getAttribute("data-confirm");
+    if (mensajeConfirmacion && !window.confirm(mensajeConfirmacion)) {
+      return;
+    }
+    enviarFormJsonAjax(jsonForm);
+  });
 })();

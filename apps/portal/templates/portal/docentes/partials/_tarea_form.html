@@ -1,0 +1,5 @@
+{% extends "partials/_modal_form_base.html" %}
+{% block titulo %}{% if form.instance.pk %}Editar tarea{% else %}Nueva tarea{% endif %}{% endblock %}
+{% block form_action %}{% if form.instance.pk %}{% url 'portal:docente_tarea_editar' form.instance.pk %}{% else %}{% url 'portal:docente_tarea_crear' %}{% endif %}{% endblock %}
+{% block refresh_url %}{% url 'portal:docente_tareas_lista' %}{% endblock %}
+{% block refresh_target %}#lista-tareas{% endblock %}

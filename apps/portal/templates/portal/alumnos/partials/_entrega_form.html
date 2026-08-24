@@ -1,0 +1,7 @@
+{% extends "partials/_modal_form_base.html" %}
+{% block titulo %}{% if form.instance.pk %}Editar entrega{% else %}Entregar tarea{% endif %}{% endblock %}
+{% block form_action %}{% if form.instance.pk %}{% url 'portal:alumno_entrega_editar' form.instance.pk %}{% else %}{% url 'portal:alumno_entrega_crear' tarea.pk %}{% endif %}{% endblock %}
+{% block form_enctype %}multipart/form-data{% endblock %}
+{% block refresh_url %}{% url 'portal:alumno_tareas_lista' %}{% endblock %}
+{% block refresh_target %}#lista-tareas{% endblock %}
+{% block texto_boton %}Entregar{% endblock %}

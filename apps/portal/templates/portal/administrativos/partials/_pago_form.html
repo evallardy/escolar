@@ -1,0 +1,5 @@
+{% extends "partials/_modal_form_base.html" %}
+{% block titulo %}{% if form.instance.pk %}Editar pago{% else %}Nuevo pago{% endif %}{% endblock %}
+{% block form_action %}{% if form.instance.pk %}{% url 'portal:admin_pago_editar' form.instance.pk %}{% else %}{% url 'portal:admin_pago_crear' cargo.pk %}{% endif %}{% endblock %}
+{% block refresh_url %}{% url 'portal:admin_pagos_lista' cargo.pk %}{% endblock %}
+{% block refresh_target %}#lista-pagos{% endblock %}

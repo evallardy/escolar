@@ -1,0 +1,5 @@
+{% extends "partials/_modal_form_base.html" %}
+{% block titulo %}{% if form.instance.pk %}Editar concepto de cobro{% else %}Nuevo concepto de cobro{% endif %}{% endblock %}
+{% block form_action %}{% if form.instance.pk %}{% url 'portal:admin_concepto_editar' form.instance.pk %}{% else %}{% url 'portal:admin_concepto_crear' %}{% endif %}{% endblock %}
+{% block refresh_url %}{% url 'portal:admin_conceptos_lista' %}{% endblock %}
+{% block refresh_target %}#lista-conceptos{% endblock %}

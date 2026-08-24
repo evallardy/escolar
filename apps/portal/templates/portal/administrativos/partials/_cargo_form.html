@@ -1,0 +1,5 @@
+{% extends "partials/_modal_form_base.html" %}
+{% block titulo %}{% if form.instance.pk %}Editar cargo{% else %}Nuevo cargo{% endif %}{% endblock %}
+{% block form_action %}{% if form.instance.pk %}{% url 'portal:admin_cargo_editar' form.instance.pk %}{% else %}{% url 'portal:admin_cargo_crear' %}{% endif %}{% endblock %}
+{% block refresh_url %}{% url 'portal:admin_cargos_lista' %}{% endblock %}
+{% block refresh_target %}#lista-cargos{% endblock %}

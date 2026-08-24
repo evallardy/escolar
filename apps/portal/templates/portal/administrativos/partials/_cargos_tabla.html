@@ -1,0 +1,52 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0"><i class="bi bi-receipt"></i> Cargos de alumnos</h5>
+    <a href="{% url 'portal:admin_cargo_crear' %}" data-modal-link class="btn btn-primary btn-sm">
+      <i class="bi bi-plus-lg"></i> Agregar cargo
+    </a>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead>
+        <tr>
+          <th>Alumno</th>
+          <th>Concepto</th>
+          <th>Periodo</th>
+          <th>Monto</th>
+          <th>Fecha límite</th>
+          <th>Estatus</th>
+          <th class="text-end">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cargo in cargos %}
+        <tr>
+          <td>{{ cargo.alumno }}</td>
+          <td>{{ cargo.concepto }}</td>
+          <td>{{ cargo.periodo_etiqueta }}</td>
+          <td>${{ cargo.monto }}</td>
+          <td>{{ cargo.fecha_limite|date:"d/m/Y" }}</td>
+          <td>{{ cargo.get_estatus_display }}</td>
+          <td class="text-end">
+            <a href="{% url 'portal:admin_pagos_lista' cargo.pk %}" data-ajax-link data-target="#app-content" class="btn btn-sm btn-outline-primary" title="Pagos">
+              <i class="bi bi-cash"></i>
+            </a>
+            <a href="{% url 'portal:admin_cargo_editar' cargo.pk %}" data-modal-link class="btn btn-sm btn-outline-secondary" title="Editar">
+              <i class="bi bi-pencil"></i>
+            </a>
+            <form method="post" action="{% url 'portal:admin_cargo_eliminar' cargo.pk %}"
+                  data-ajax-json-form data-confirm="¿Eliminar este cargo y sus pagos asociados?"
+                  data-refresh-url="{% url 'portal:admin_cargos_lista' %}" data-refresh-target="#lista-cargos"
+                  class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" class="text-center text-muted py-4">No hay cargos registrados.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+{% load crispy_forms_tags %}
+{% comment %}
+Plantilla base para TODOS los formularios de alta/edición del patrón CRUD
+del portal. Cada formulario específico debe extender esta plantilla y
+sobreescribir los bloques titulo/form_action/refresh_url/refresh_target
+(y form_enctype si sube archivos). Así se garantiza que todas las
+pantallas de "Agregar"/"Editar" tengan la misma apariencia y comportamiento.
+{% endcomment %}
+<div class="modal-header">
+  <h5 class="modal-title">{% block titulo %}Formulario{% endblock %}</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+</div>
+<form method="post"
+      action="{% block form_action %}{{ request.path }}{% endblock %}"
+      enctype="{% block form_enctype %}application/x-www-form-urlencoded{% endblock %}"
+      data-ajax-json-form
+      data-refresh-url="{% block refresh_url %}{% endblock %}"
+      data-refresh-target="{% block refresh_target %}#app-content{% endblock %}">
+  {% csrf_token %}
+  <div class="modal-body">
+    {% block form_body %}{{ form|crispy }}{% endblock %}
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    <button type="submit" class="btn btn-primary">{% block texto_boton %}Guardar{% endblock %}</button>
+  </div>
+</form>

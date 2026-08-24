@@ -1,0 +1,6 @@
+{% extends "partials/_modal_form_base.html" %}
+{% block titulo %}Nuevo seguimiento{% endblock %}
+{% block form_action %}{% url 'portal:admin_seguimiento_crear' incidencia.pk %}{% endblock %}
+{% block refresh_url %}{% url 'portal:admin_seguimientos_lista' incidencia.pk %}{% endblock %}
+{% block refresh_target %}#lista-seguimientos{% endblock %}
+{% block texto_boton %}Agregar{% endblock %}

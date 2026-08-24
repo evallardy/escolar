@@ -1,0 +1,6 @@
+{% extends "partials/_modal_form_base.html" %}
+{% block titulo %}Calificar entrega de {{ object.alumno }}{% endblock %}
+{% block form_action %}{% url 'portal:docente_entrega_calificar' object.pk %}{% endblock %}
+{% block refresh_url %}{% url 'portal:docente_entregas_lista' object.tarea_id %}{% endblock %}
+{% block refresh_target %}#lista-entregas{% endblock %}
+{% block texto_boton %}Guardar calificación{% endblock %}

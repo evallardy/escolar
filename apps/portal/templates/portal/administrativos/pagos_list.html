@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Pagos: {{ cargo }}{% endblock %}
+{% block content %}
+<div id="lista-pagos" data-cargo-pk="{{ cargo.pk }}">
+  {% include "portal/administrativos/partials/_pagos_tabla.html" %}
+</div>
+{% endblock %}

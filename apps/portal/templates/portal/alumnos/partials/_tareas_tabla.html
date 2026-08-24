@@ -1,0 +1,56 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="mb-0"><i class="bi bi-journal-text"></i> Mis tareas</h5>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Grupo</th>
+          <th>Fecha límite</th>
+          <th>Estado</th>
+          <th>Calificación</th>
+          <th class="text-end">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for fila in filas %}
+        <tr>
+          <td>{{ fila.tarea.titulo }}</td>
+          <td>{{ fila.tarea.grupo }}</td>
+          <td>{{ fila.tarea.fecha_entrega|date:"d/m/Y H:i" }}</td>
+          <td>
+            {% if fila.entrega %}
+              <span class="badge bg-success">Entregada</span>
+            {% else %}
+              <span class="badge bg-secondary">Pendiente</span>
+            {% endif %}
+          </td>
+          <td>{{ fila.entrega.calificacion|default:"Sin calificar" }}</td>
+          <td class="text-end">
+            {% if fila.entrega %}
+              <a href="{% url 'portal:alumno_entrega_editar' fila.entrega.pk %}" data-modal-link class="btn btn-sm btn-outline-secondary" title="Editar entrega">
+                <i class="bi bi-pencil"></i>
+              </a>
+              <form method="post" action="{% url 'portal:alumno_entrega_eliminar' fila.entrega.pk %}"
+                    data-ajax-json-form data-confirm="¿Eliminar tu entrega de esta tarea?"
+                    data-refresh-url="{% url 'portal:alumno_tareas_lista' %}" data-refresh-target="#lista-tareas"
+                    class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash"></i></button>
+              </form>
+            {% else %}
+              <a href="{% url 'portal:alumno_entrega_crear' fila.tarea.pk %}" data-modal-link class="btn btn-sm btn-primary" title="Entregar">
+                <i class="bi bi-upload"></i> Entregar
+              </a>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center text-muted py-4">No tienes tareas asignadas todavía.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
