@@ -1,0 +1,28 @@
+body {
+  background-color: #f5f6f8;
+}
+
+#sidebar {
+  min-height: calc(100vh - 56px);
+}
+
+#sidebar .nav-link {
+  color: #333;
+}
+
+#sidebar .nav-link.active,
+#sidebar .nav-link:hover {
+  background-color: #0d6efd;
+  color: #fff;
+}
+
+@media (max-width: 991.98px) {
+  #sidebar {
+    display: none;
+  }
+  #sidebar.show {
+    display: block;
+    position: absolute;
+    z-index: 1030;
+  }
+}

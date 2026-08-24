@@ -1,0 +1,5 @@
+# Dependencias adicionales SOLO para el servidor de producción.
+# Instalar con: pip install -r requirements.txt -r requirements-production.txt
+-r requirements.txt
+
+gunicorn==23.0.0

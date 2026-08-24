@@ -1,0 +1,49 @@
+{% load static %}
+<aside class="bg-light border-end p-3" id="sidebar" style="min-width:240px;">
+  <ul class="nav nav-pills flex-column gap-1">
+    {% if user.rol_principal == "PADRE" %}
+      <li class="nav-item">
+        <a class="nav-link" data-ajax-link data-target="#app-content" href="{% url 'portal:dashboard_padres' %}">
+          <i class="bi bi-speedometer2 me-1"></i> Mi panel
+        </a>
+      </li>
+    {% elif user.rol_principal == "ALUMNO" %}
+      <li class="nav-item">
+        <a class="nav-link" data-ajax-link data-target="#app-content" href="{% url 'portal:dashboard_alumnos' %}">
+          <i class="bi bi-speedometer2 me-1"></i> Mi panel
+        </a>
+      </li>
+    {% elif user.rol_principal == "DOCENTE" %}
+      <li class="nav-item">
+        <a class="nav-link" data-ajax-link data-target="#app-content" href="{% url 'portal:dashboard_docentes' %}">
+          <i class="bi bi-speedometer2 me-1"></i> Mi panel
+        </a>
+      </li>
+    {% elif user.rol_principal == "ADMINISTRATIVO" %}
+      <li class="nav-item">
+        <a class="nav-link" data-ajax-link data-target="#app-content" href="{% url 'portal:dashboard_administrativos' %}">
+          <i class="bi bi-speedometer2 me-1"></i> Panel administrativo
+        </a>
+      </li>
+    {% elif user.rol_principal == "DIRECTIVO" %}
+      <li class="nav-item">
+        <a class="nav-link" data-ajax-link data-target="#app-content" href="{% url 'portal:dashboard_directivos' %}">
+          <i class="bi bi-speedometer2 me-1"></i> Panel directivo
+        </a>
+      </li>
+    {% else %}
+      <li class="nav-item">
+        <a class="nav-link" data-ajax-link data-target="#app-content" href="{% url 'portal:dashboard_generico' %}">
+          <i class="bi bi-speedometer2 me-1"></i> Inicio
+        </a>
+      </li>
+    {% endif %}
+    {% if user.is_superuser %}
+      <li class="nav-item mt-2 border-top pt-2">
+        <a class="nav-link" href="{% url 'admin:index' %}">
+          <i class="bi bi-gear me-1"></i> Administración Django
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+</aside>

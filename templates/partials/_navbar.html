@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+  <a class="navbar-brand" href="{% url 'portal:dashboard_router' %}">
+    <i class="bi bi-mortarboard-fill me-1"></i> Sistema Escolar
+  </a>
+  <button class="navbar-toggler d-lg-none" type="button" id="btn-toggle-sidebar" aria-label="Mostrar/ocultar menú">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="ms-auto d-flex align-items-center">
+    <span class="text-light small me-3">
+      {{ user.get_full_name|default:user.username }}
+      <span class="badge bg-secondary">{{ user.get_rol_principal_display }}</span>
+    </span>
+    <form action="{% url 'core:logout' %}" method="post" class="d-inline">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm btn-outline-light">
+        <i class="bi bi-box-arrow-right"></i> Salir
+      </button>
+    </form>
+  </div>
+</nav>
