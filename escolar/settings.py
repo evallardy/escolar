@@ -49,6 +49,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',
+    'rest_framework.authtoken',
     'crispy_forms',
     'crispy_bootstrap5',
 ]
@@ -207,6 +208,15 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.ScopedRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        # Límites conservadores para evitar abuso en los endpoints de la app
+        # móvil (GPS) y de la terminal biométrica, tal como pide docs/DISENO.md.
+        'gps': '20/minute',
+        'biometrico': '60/minute',
+    },
 }
 
 # Parámetro global de asistencia GPS: intervalo mínimo permitido (minutos).

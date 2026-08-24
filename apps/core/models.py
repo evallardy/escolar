@@ -56,6 +56,18 @@ class Plantel(models.Model):
     telefono = models.CharField(max_length=20, blank=True)
     logo = models.ImageField(upload_to="planteles/logos/", null=True, blank=True)
     activo = models.BooleanField(default=True)
+    latitud = models.DecimalField(
+        max_digits=9, decimal_places=6, null=True, blank=True,
+        help_text="Coordenada del plantel para calcular la geocerca de GPS.",
+    )
+    longitud = models.DecimalField(
+        max_digits=9, decimal_places=6, null=True, blank=True,
+        help_text="Coordenada del plantel para calcular la geocerca de GPS.",
+    )
+    radio_geocerca_metros = models.PositiveIntegerField(
+        default=150,
+        help_text="Radio (metros) alrededor de latitud/longitud considerado 'dentro del plantel'.",
+    )
 
     class Meta:
         verbose_name = "Plantel"
@@ -64,6 +76,33 @@ class Plantel(models.Model):
 
     def __str__(self) -> str:
         return f"{self.clave} - {self.nombre}"
+
+    def esta_dentro_de_geocerca(self, latitud, longitud) -> bool:
+        """Determina si un punto (lat/lon) cae dentro del radio de geocerca
+        configurado para este plantel. Si el plantel no tiene coordenadas
+        configuradas, no se puede determinar y se considera False."""
+        if self.latitud is None or self.longitud is None:
+            return False
+        return _distancia_haversine_metros(
+            float(self.latitud), float(self.longitud), float(latitud), float(longitud)
+        ) <= self.radio_geocerca_metros
+
+
+def _distancia_haversine_metros(lat1, lon1, lat2, lon2) -> float:
+    """Distancia en metros entre dos coordenadas geográficas (fórmula de
+    Haversine), usada para la geocerca de GPS del plantel."""
+    import math
+
+    radio_tierra_m = 6371000
+    phi1, phi2 = math.radians(lat1), math.radians(lat2)
+    delta_phi = math.radians(lat2 - lat1)
+    delta_lambda = math.radians(lon2 - lon1)
+    a = (
+        math.sin(delta_phi / 2) ** 2
+        + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2) ** 2
+    )
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    return radio_tierra_m * c
 
 
 class Usuario(AbstractUser):

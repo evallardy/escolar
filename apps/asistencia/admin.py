@@ -9,6 +9,11 @@ class DispositivoBiometricoAdmin(admin.ModelAdmin):
     list_filter = ("plantel", "activo")
     search_fields = ("identificador", "marca", "modelo")
     autocomplete_fields = ("plantel",)
+    readonly_fields = ("clave_api",)
+    fields = (
+        "plantel", "marca", "modelo", "identificador", "ubicacion", "activo",
+        "clave_api",
+    )
 
 
 @admin.register(RegistroAsistencia)

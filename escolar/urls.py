@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('cuenta/', include('apps.core.urls')),
     path('portal/', include('apps.portal.urls')),
+    path('api/', include('apps.api.urls')),
     path('', RedirectView.as_view(pattern_name='portal:dashboard_router'), name='home'),
 ]
 

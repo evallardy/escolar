@@ -1,5 +1,7 @@
 """Control de asistencia de alumnos y docentes vía terminal biométrica o
 registro manual, y modelo de datos para el futuro monitoreo de GPS móvil."""
+import secrets
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -22,6 +24,14 @@ class DispositivoBiometrico(models.Model):
     )
     ubicacion = models.CharField(max_length=150, blank=True)
     activo = models.BooleanField(default=True)
+    clave_api = models.CharField(
+        max_length=64,
+        unique=True,
+        editable=False,
+        blank=True,
+        help_text="Clave secreta generada automáticamente para autenticar a "
+        "este dispositivo contra la API REST (header X-Device-Key).",
+    )
 
     class Meta:
         verbose_name = "Dispositivo biométrico"
@@ -30,6 +40,11 @@ class DispositivoBiometrico(models.Model):
 
     def __str__(self) -> str:
         return f"{self.marca} {self.modelo} ({self.identificador})".strip()
+
+    def save(self, *args, **kwargs):
+        if not self.clave_api:
+            self.clave_api = secrets.token_hex(32)
+        super().save(*args, **kwargs)
 
 
 class RegistroAsistencia(models.Model):
