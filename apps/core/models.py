@@ -7,6 +7,17 @@ from django.db import models
 from django.utils import timezone
 
 
+class VigenciaQuerySet(models.QuerySet):
+    """Permite filtrar en la base de datos (no solo en Python) los registros
+    de parametría vigentes a una fecha dada."""
+
+    def vigentes(self, fecha=None):
+        fecha = fecha or timezone.localdate()
+        return self.filter(activo=True, vigente_desde__lte=fecha).filter(
+            models.Q(vigente_hasta__isnull=True) | models.Q(vigente_hasta__gte=fecha)
+        )
+
+
 class Vigencia(models.Model):
     """Mixin abstracto para parametría con fecha de vigencia.
 
@@ -18,6 +29,8 @@ class Vigencia(models.Model):
     vigente_desde = models.DateField(default=timezone.localdate)
     vigente_hasta = models.DateField(null=True, blank=True)
     activo = models.BooleanField(default=True)
+
+    objects = VigenciaQuerySet.as_manager()
 
     class Meta:
         abstract = True
