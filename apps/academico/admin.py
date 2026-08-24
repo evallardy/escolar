@@ -3,6 +3,8 @@ from django.contrib import admin
 from .models import (
     CalendarioEvento,
     CicloEscolar,
+    Grupo,
+    HorarioClase,
     Materia,
     NivelEducativo,
     PlanEstudios,
@@ -81,3 +83,17 @@ class CalendarioEventoAdmin(admin.ModelAdmin):
     list_filter = ("tipo", "ciclo_escolar")
     search_fields = ("nombre",)
     autocomplete_fields = ("ciclo_escolar",)
+
+
+class HorarioClaseInline(admin.TabularInline):
+    model = HorarioClase
+    extra = 0
+
+
+@admin.register(Grupo)
+class GrupoAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "materia", "ciclo_escolar", "turno", "cupo_maximo", "activo")
+    list_filter = ("ciclo_escolar", "turno", "activo")
+    search_fields = ("clave", "materia__nombre", "materia__clave")
+    autocomplete_fields = ("ciclo_escolar", "materia")
+    inlines = [HorarioClaseInline]

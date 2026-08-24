@@ -191,3 +191,74 @@ class CalendarioEvento(models.Model):
             raise ValidationError(
                 "La fecha de fin del evento no puede ser anterior a la fecha de inicio."
             )
+
+
+class Grupo(models.Model):
+    """Grupo de alumnos que cursa una materia en un ciclo escolar
+    (ej. "MAT101 - Grupo A", turno matutino, aula 12).
+
+    El docente responsable se asigna aparte, en ``docentes.AsignacionDocente``,
+    para poder conservar historial si el docente cambia durante el ciclo.
+    """
+
+    class Turno(models.TextChoices):
+        MATUTINO = "MATUTINO", "Matutino"
+        VESPERTINO = "VESPERTINO", "Vespertino"
+        MIXTO = "MIXTO", "Mixto"
+
+    ciclo_escolar = models.ForeignKey(
+        CicloEscolar, on_delete=models.PROTECT, related_name="grupos"
+    )
+    materia = models.ForeignKey(
+        Materia, on_delete=models.PROTECT, related_name="grupos"
+    )
+    clave = models.CharField(max_length=10, help_text='Ej. "A", "B", "Único".')
+    cupo_maximo = models.PositiveSmallIntegerField(default=30)
+    aula = models.CharField(max_length=50, blank=True)
+    turno = models.CharField(max_length=15, choices=Turno.choices, default=Turno.MATUTINO)
+    activo = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Grupo"
+        verbose_name_plural = "Grupos"
+        unique_together = [("ciclo_escolar", "materia", "clave")]
+        ordering = ["ciclo_escolar", "materia", "clave"]
+
+    def __str__(self) -> str:
+        return f"{self.materia.clave} - Grupo {self.clave} ({self.ciclo_escolar.clave})"
+
+    @property
+    def cupo_disponible(self) -> int:
+        inscritos = self.inscripciones_materia.filter(estatus="INSCRITO").count()
+        return max(self.cupo_maximo - inscritos, 0)
+
+
+class HorarioClase(models.Model):
+    """Bloque horario en el que se imparte un grupo (puede haber varios por
+    grupo, ej. lunes/miércoles/viernes 8:00-9:00)."""
+
+    class DiaSemana(models.IntegerChoices):
+        LUNES = 1, "Lunes"
+        MARTES = 2, "Martes"
+        MIERCOLES = 3, "Miércoles"
+        JUEVES = 4, "Jueves"
+        VIERNES = 5, "Viernes"
+        SABADO = 6, "Sábado"
+        DOMINGO = 7, "Domingo"
+
+    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE, related_name="horarios")
+    dia_semana = models.PositiveSmallIntegerField(choices=DiaSemana.choices)
+    hora_inicio = models.TimeField()
+    hora_fin = models.TimeField()
+
+    class Meta:
+        verbose_name = "Horario de clase"
+        verbose_name_plural = "Horarios de clase"
+        ordering = ["dia_semana", "hora_inicio"]
+
+    def __str__(self) -> str:
+        return f"{self.grupo} - {self.get_dia_semana_display()} {self.hora_inicio}-{self.hora_fin}"
+
+    def clean(self):
+        if self.hora_inicio and self.hora_fin and self.hora_fin <= self.hora_inicio:
+            raise ValidationError("La hora de fin debe ser posterior a la hora de inicio.")
