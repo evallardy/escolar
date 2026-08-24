@@ -3,25 +3,26 @@
   <div class="col-md-3">
     <div class="card shadow-sm"><div class="card-body">
       <h2 class="h6 text-muted">Matrícula total</h2>
-      <p class="text-muted small mb-0">Próximamente.</p>
+      <p class="display-6 mb-0">{{ matricula_total }}</p>
     </div></div>
   </div>
   <div class="col-md-3">
     <div class="card shadow-sm"><div class="card-body">
       <h2 class="h6 text-muted">Cobranza del mes</h2>
-      <p class="text-muted small mb-0">Próximamente.</p>
+      <p class="display-6 mb-0">${{ cobranza_mes }}</p>
     </div></div>
   </div>
   <div class="col-md-3">
     <div class="card shadow-sm"><div class="card-body">
-      <h2 class="h6 text-muted">Asistencia general</h2>
-      <p class="text-muted small mb-0">Próximamente.</p>
+      <h2 class="h6 text-muted">Asistencia de hoy</h2>
+      <p class="display-6 mb-0">{{ asistencia_hoy }}</p>
+      <p class="text-muted small mb-0">personas con entrada registrada hoy</p>
     </div></div>
   </div>
   <div class="col-md-3">
     <div class="card shadow-sm"><div class="card-body">
       <h2 class="h6 text-muted">Incidencias abiertas</h2>
-      <p class="text-muted small mb-0">Próximamente.</p>
+      <p class="display-6 mb-0">{{ incidencias_abiertas }}</p>
     </div></div>
   </div>
 </div>

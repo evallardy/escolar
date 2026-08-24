@@ -1,27 +1,42 @@
 <h1 class="h4 mb-3">Bienvenido(a), {{ user.get_full_name|default:user.username }}</h1>
-<div class="row g-3">
-  <div class="col-md-4">
-    <div class="card shadow-sm">
-      <div class="card-body">
+
+{% if not hijos_info %}
+<div class="alert alert-warning">
+  No tenemos alumnos vinculados a tu cuenta todavía. Contacta a administración.
+</div>
+{% endif %}
+
+{% for info in hijos_info %}
+<div class="card shadow-sm mb-3">
+  <div class="card-header">{{ info.alumno }}</div>
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-4">
         <h2 class="h6 text-muted">Estado de cuenta</h2>
-        <p class="text-muted small mb-0">Próximamente: colegiaturas pendientes y pagos de tus hijos.</p>
+        <p class="mb-0">${{ info.saldo_pendiente }} pendientes ({{ info.cargos_pendientes }} cargos)</p>
       </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h2 class="h6 text-muted">Calificaciones y cardex</h2>
-        <p class="text-muted small mb-0">Próximamente: avance académico de tus hijos.</p>
+      <div class="col-md-4">
+        <h2 class="h6 text-muted">Cardex reciente</h2>
+        <ul class="list-unstyled small mb-0">
+          {% for c in info.cardex %}
+          <li>{{ c.materia.nombre }} - {{ c.get_estatus_display }}{% if c.calificacion %} ({{ c.calificacion }}){% endif %}</li>
+          {% empty %}
+          <li class="text-muted">Sin registros de cardex.</li>
+          {% endfor %}
+        </ul>
       </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h2 class="h6 text-muted">Asistencia</h2>
-        <p class="text-muted small mb-0">Próximamente: asistencia diaria de tus hijos.</p>
+      <div class="col-md-4">
+        <h2 class="h6 text-muted">Asistencia reciente</h2>
+        <ul class="list-unstyled small mb-0">
+          {% for a in info.asistencia %}
+          <li>{{ a.get_tipo_display }} - {{ a.fecha_hora|date:"d/m/Y H:i" }}</li>
+          {% empty %}
+          <li class="text-muted">Sin registros de asistencia.</li>
+          {% endfor %}
+        </ul>
       </div>
     </div>
   </div>
 </div>
+{% endfor %}
+

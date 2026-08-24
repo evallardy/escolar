@@ -2,26 +2,27 @@
 <div class="row g-3">
   <div class="col-md-3">
     <div class="card shadow-sm"><div class="card-body">
-      <h2 class="h6 text-muted">Inscripciones</h2>
-      <p class="text-muted small mb-0">Próximamente.</p>
+      <h2 class="h6 text-muted">Inscripciones activas</h2>
+      <p class="display-6 mb-0">{{ inscripciones_activas }}</p>
     </div></div>
   </div>
   <div class="col-md-3">
     <div class="card shadow-sm"><div class="card-body">
-      <h2 class="h6 text-muted">Cobranza</h2>
-      <p class="text-muted small mb-0">Próximamente.</p>
+      <h2 class="h6 text-muted">Cobranza pendiente</h2>
+      <p class="display-6 mb-0">${{ monto_por_cobrar }}</p>
+      <p class="text-muted small mb-0">{{ cargos_pendientes }} cargos pendientes/vencidos</p>
     </div></div>
   </div>
   <div class="col-md-3">
     <div class="card shadow-sm"><div class="card-body">
-      <h2 class="h6 text-muted">Incidencias</h2>
-      <p class="text-muted small mb-0">Próximamente.</p>
+      <h2 class="h6 text-muted">Incidencias abiertas</h2>
+      <p class="display-6 mb-0">{{ incidencias_abiertas }}</p>
     </div></div>
   </div>
   <div class="col-md-3">
     <div class="card shadow-sm"><div class="card-body">
       <h2 class="h6 text-muted">Reportes</h2>
-      <p class="text-muted small mb-0">Próximamente.</p>
+      <p class="text-muted small mb-0">Consulta el detalle completo en el <a href="/admin/">panel de administración</a>.</p>
     </div></div>
   </div>
 </div>
