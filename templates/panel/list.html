@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ config.verbose_name_plural }} · Panel Ejecutivo{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/panel.css' %}">{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+  <div>
+    <a href="{% url 'panel:index' %}" class="text-decoration-none small text-muted d-block mb-1">
+      <i class="bi bi-arrow-left"></i> Panel Ejecutivo
+    </a>
+    <h1 class="h3 mb-0"><i class="bi {{ config.icono }} me-2"></i>{{ config.verbose_name_plural }}</h1>
+  </div>
+  <a href="{% url 'panel:agregar' config.app_label config.model_name %}" class="btn btn-primary">
+    <i class="bi bi-plus-lg me-1"></i>Agregar {{ config.verbose_name }}
+  </a>
+</div>
+
+<div class="card panel-filtros mb-3">
+  <div class="card-body">
+    <form method="get" class="row g-2 align-items-end">
+      {% if config.search_fields %}
+      <div class="col-md-4">
+        <label class="form-label small">Buscar</label>
+        <input type="text" name="q" value="{{ termino }}" class="form-control" placeholder="Buscar en {{ config.verbose_name_plural|lower }}...">
+      </div>
+      {% endif %}
+      {% for filtro in filtros %}
+      <div class="col-md-3">
+        <label class="form-label small">{{ filtro.etiqueta }}</label>
+        <select name="{{ filtro.nombre }}" class="form-select">
+          <option value="">Todos</option>
+          {% for valor, etiqueta in filtro.opciones %}
+            <option value="{{ valor }}" {% if filtro.valor == valor %}selected{% endif %}>{{ etiqueta }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endfor %}
+      <div class="col-md-auto">
+        <button type="submit" class="btn btn-outline-secondary"><i class="bi bi-funnel"></i> Filtrar</button>
+        <a href="{% url 'panel:listado' config.app_label config.model_name %}" class="btn btn-outline-secondary"><i class="bi bi-x-lg"></i></a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            {% for col in columnas %}<th>{{ col }}</th>{% endfor %}
+            <th class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for fila in filas %}
+          <tr>
+            {% for valor in fila.valores %}
+              <td>
+                {% if valor.es_bool %}
+                  {% if valor.valor %}<i class="bi bi-check-circle-fill text-success"></i>{% else %}<i class="bi bi-x-circle-fill text-danger"></i>{% endif %}
+                {% else %}
+                  {{ valor.valor|default:"—" }}
+                {% endif %}
+              </td>
+            {% endfor %}
+            <td class="text-end">
+              <a href="{% url 'panel:editar' config.app_label config.model_name fila.obj.pk %}" class="btn btn-sm btn-outline-primary" title="Editar">
+                <i class="bi bi-pencil"></i>
+              </a>
+              <a href="{% url 'panel:eliminar' config.app_label config.model_name fila.obj.pk %}" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                <i class="bi bi-trash"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="{{ columnas|length|add:1 }}" class="text-center text-muted py-4">Sin registros.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card-footer d-flex justify-content-between align-items-center">
+    <span class="text-muted small">{{ total }} registro{{ total|pluralize }}</span>
+    {% if pagina.paginator.num_pages > 1 %}
+    <nav>
+      <ul class="pagination pagination-sm mb-0">
+        {% if pagina.has_previous %}
+          <li class="page-item"><a class="page-link" href="?{% if query_extra %}{{ query_extra }}&{% endif %}pagina={{ pagina.previous_page_number }}">Anterior</a></li>
+        {% endif %}
+        <li class="page-item disabled"><span class="page-link">{{ pagina.number }} / {{ pagina.paginator.num_pages }}</span></li>
+        {% if pagina.has_next %}
+          <li class="page-item"><a class="page-link" href="?{% if query_extra %}{{ query_extra }}&{% endif %}pagina={{ pagina.next_page_number }}">Siguiente</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

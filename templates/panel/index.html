@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Panel Ejecutivo{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/panel.css' %}">{% endblock %}
+{% block content %}
+<div class="panel-hero mb-4">
+  <h1><i class="bi bi-graph-up-arrow me-2"></i>Panel Ejecutivo</h1>
+  <p class="mb-0">Vista consolidada de la información administrada en el sistema escolar.</p>
+</div>
+
+{% for modulo in modulos %}
+  {% if modulo.modelos %}
+  <section class="mb-4">
+    <h2 class="h5 panel-section-title"><i class="bi {{ modulo.icono }} me-2"></i>{{ modulo.nombre }}</h2>
+    <div class="row g-3">
+      {% for item in modulo.modelos %}
+        <div class="col-sm-6 col-lg-4 col-xl-3">
+          <a href="{% url 'panel:listado' item.config.app_label item.config.model_name %}" class="panel-card text-decoration-none">
+            <div class="panel-card-icon"><i class="bi {{ item.config.icono }}"></i></div>
+            <div class="panel-card-body">
+              <div class="panel-card-title">{{ item.config.verbose_name_plural }}</div>
+              <div class="panel-card-count">{{ item.total }}</div>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags static %}
+{% block title %}{% if es_nuevo %}Agregar{% else %}Editar{% endif %} {{ config.verbose_name }} · Panel Ejecutivo{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/panel.css' %}">{% endblock %}
+{% block content %}
+<a href="{% url 'panel:listado' config.app_label config.model_name %}" class="text-decoration-none small text-muted d-block mb-1">
+  <i class="bi bi-arrow-left"></i> {{ config.verbose_name_plural }}
+</a>
+<h1 class="h3 mb-3">
+  <i class="bi {{ config.icono }} me-2"></i>{% if es_nuevo %}Agregar{% else %}Editar{% endif %} {{ config.verbose_name }}
+</h1>
+<div class="card">
+  <div class="card-body">
+    <form method="post" {% if config.tiene_archivos %}enctype="multipart/form-data"{% endif %}>
+      {% csrf_token %}
+      {{ form|crispy }}
+      <div class="d-flex gap-2 mt-3">
+        <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Guardar</button>
+        <a href="{% url 'panel:listado' config.app_label config.model_name %}" class="btn btn-outline-secondary">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

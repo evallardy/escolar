@@ -1,0 +1,72 @@
+/* Panel Ejecutivo: diseño moderno tipo dashboard corporativo (distinto del
+   admin gris de Django), reutilizando Bootstrap 5 ya cargado en base.html. */
+
+.panel-hero {
+    background: linear-gradient(135deg, #0f2b46 0%, #1f4e79 55%, #2f7fc1 100%);
+    color: #fff;
+    border-radius: 0.75rem;
+    padding: 1.75rem 2rem;
+    box-shadow: 0 8px 24px rgba(15, 43, 70, 0.25);
+}
+
+.panel-hero h1 {
+    font-weight: 700;
+    font-size: 1.6rem;
+    margin-bottom: 0.25rem;
+}
+
+.panel-section-title {
+    color: #1f4e79;
+    font-weight: 700;
+    border-bottom: 2px solid #e3ecf5;
+    padding-bottom: 0.4rem;
+}
+
+.panel-card {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    background: #fff;
+    border: 1px solid #e6ecf2;
+    border-radius: 0.65rem;
+    padding: 1rem 1.1rem;
+    height: 100%;
+    box-shadow: 0 2px 8px rgba(15, 43, 70, 0.05);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.panel-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 22px rgba(15, 43, 70, 0.14);
+}
+
+.panel-card-icon {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    border-radius: 50%;
+    background: #eaf2fb;
+    color: #1f4e79;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.panel-card-title {
+    color: #33475b;
+    font-weight: 600;
+    font-size: 0.92rem;
+    line-height: 1.2;
+}
+
+.panel-card-count {
+    color: #1f4e79;
+    font-weight: 700;
+    font-size: 1.35rem;
+}
+
+.panel-filtros .form-label {
+    color: #6b7c8f;
+    font-weight: 600;
+}
