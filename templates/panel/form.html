@@ -1,8 +1,13 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags static %}
 {% block title %}{% if es_nuevo %}Agregar{% else %}Editar{% endif %} {{ config.verbose_name }} · Panel Ejecutivo{% endblock %}
-{% block extra_css %}<link rel="stylesheet" href="{% static 'css/panel.css' %}">{% endblock %}
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/panel.css' %}">
+{% endblock %}
 {% block content %}
+<div class="panel-shell">
 <a href="{% url 'panel:listado' config.app_label config.model_name %}" class="text-decoration-none small text-muted d-block mb-1">
   <i class="bi bi-arrow-left"></i> {{ config.verbose_name_plural }}
 </a>
@@ -20,5 +25,6 @@
       </div>
     </form>
   </div>
+</div>
 </div>
 {% endblock %}

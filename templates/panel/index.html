@@ -1,17 +1,37 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}Panel Ejecutivo{% endblock %}
-{% block extra_css %}<link rel="stylesheet" href="{% static 'css/panel.css' %}">{% endblock %}
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/panel.css' %}">
+{% endblock %}
 {% block content %}
+<div class="panel-shell">
 <div class="panel-hero mb-4">
+  <p class="panel-hero-eyebrow">Institución Educativa</p>
   <h1><i class="bi bi-graph-up-arrow me-2"></i>Panel Ejecutivo</h1>
   <p class="mb-0">Vista consolidada de la información administrada en el sistema escolar.</p>
 </div>
 
+<div class="row g-3 mb-4">
+  {% for kpi in kpis %}
+    <div class="col-6 col-lg">
+      <div class="panel-kpi">
+        <div class="panel-kpi-icono"><i class="bi {{ kpi.icono }}"></i></div>
+        <div class="panel-kpi-valor">{{ kpi.valor }}</div>
+        <div class="panel-kpi-etiqueta">{{ kpi.etiqueta }}</div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
 {% for modulo in modulos %}
   {% if modulo.modelos %}
-  <section class="mb-4">
-    <h2 class="h5 panel-section-title"><i class="bi {{ modulo.icono }} me-2"></i>{{ modulo.nombre }}</h2>
+  <section class="mb-4" style="--acento: {{ modulo.color }};">
+    <h2 class="h5 panel-section-title">
+      <i class="bi {{ modulo.icono }} me-2"></i>{{ modulo.nombre }}
+    </h2>
     <div class="row g-3">
       {% for item in modulo.modelos %}
         <div class="col-sm-6 col-lg-4 col-xl-3">
@@ -28,4 +48,6 @@
   </section>
   {% endif %}
 {% endfor %}
+</div>
 {% endblock %}
+

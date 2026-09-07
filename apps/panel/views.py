@@ -9,8 +9,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.generic import TemplateView, View
 
+from apps.academico.models import Programa
+from apps.alumnos.models import Alumno
 from apps.core.mixins import RoleRequiredMixin
-from apps.core.models import Usuario
+from apps.core.models import Plantel, Usuario
+from apps.docentes.models import Docente
+from apps.nomina.models import Empleado
 
 from .forms import obtener_form_class
 from .registry import configs_por_modulo, obtener_config
@@ -34,6 +38,13 @@ class PanelIndexView(PanelBaseMixin, TemplateView):
                 {"config": cfg, "total": cfg.model.objects.count()} for cfg in modulo["modelos"]
             ]
         context["modulos"] = modulos
+        context["kpis"] = [
+            {"etiqueta": "Alumnos activos", "valor": Alumno.objects.filter(estatus=Alumno.Estatus.ACTIVO).count(), "icono": "bi-mortarboard"},
+            {"etiqueta": "Docentes", "valor": Docente.objects.filter(activo=True).count(), "icono": "bi-person-workspace"},
+            {"etiqueta": "Personal (nómina)", "valor": Empleado.objects.filter(activo=True).count(), "icono": "bi-people"},
+            {"etiqueta": "Programas académicos", "valor": Programa.objects.filter(activo=True).count(), "icono": "bi-diagram-3"},
+            {"etiqueta": "Planteles", "valor": Plantel.objects.filter(activo=True).count(), "icono": "bi-building"},
+        ]
         return context
 
 

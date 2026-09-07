@@ -1,6 +1,13 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Eliminar {{ config.verbose_name }} · Panel Ejecutivo{% endblock %}
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/panel.css' %}">
+{% endblock %}
 {% block content %}
+<div class="panel-shell">
 <div class="card" style="max-width:520px;">
   <div class="card-body">
     <h1 class="h5"><i class="bi bi-exclamation-triangle text-danger me-2"></i>Eliminar {{ config.verbose_name }}</h1>
@@ -13,5 +20,6 @@
       </div>
     </form>
   </div>
+</div>
 </div>
 {% endblock %}

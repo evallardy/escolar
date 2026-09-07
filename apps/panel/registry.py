@@ -63,16 +63,16 @@ class PanelModelConfig:
 
 
 MODULOS = [
-    {"clave": "core", "nombre": "Institución y usuarios", "icono": "bi-building"},
-    {"clave": "academico", "nombre": "Académico", "icono": "bi-mortarboard"},
-    {"clave": "alumnos", "nombre": "Alumnos", "icono": "bi-people"},
-    {"clave": "docentes", "nombre": "Docentes", "icono": "bi-person-workspace"},
-    {"clave": "inscripciones", "nombre": "Inscripciones", "icono": "bi-journal-check"},
-    {"clave": "finanzas", "nombre": "Finanzas", "icono": "bi-cash-coin"},
-    {"clave": "asistencia", "nombre": "Asistencia y GPS", "icono": "bi-fingerprint"},
-    {"clave": "nomina", "nombre": "Nómina", "icono": "bi-wallet2"},
-    {"clave": "incidencias", "nombre": "Incidencias", "icono": "bi-exclamation-triangle"},
-    {"clave": "trabajos", "nombre": "Trabajos y tareas", "icono": "bi-journal-text"},
+    {"clave": "core", "nombre": "Institución y usuarios", "icono": "bi-building", "color": "#1f4e79"},
+    {"clave": "academico", "nombre": "Académico", "icono": "bi-mortarboard", "color": "#0e7c86"},
+    {"clave": "alumnos", "nombre": "Alumnos", "icono": "bi-people", "color": "#2f7fc1"},
+    {"clave": "docentes", "nombre": "Docentes", "icono": "bi-person-workspace", "color": "#6a4c93"},
+    {"clave": "inscripciones", "nombre": "Inscripciones", "icono": "bi-journal-check", "color": "#1f8a70"},
+    {"clave": "finanzas", "nombre": "Finanzas", "icono": "bi-cash-coin", "color": "#b8860b"},
+    {"clave": "asistencia", "nombre": "Asistencia y GPS", "icono": "bi-fingerprint", "color": "#c0392b"},
+    {"clave": "nomina", "nombre": "Nómina", "icono": "bi-wallet2", "color": "#2e6e9e"},
+    {"clave": "incidencias", "nombre": "Incidencias", "icono": "bi-exclamation-triangle", "color": "#d35400"},
+    {"clave": "trabajos", "nombre": "Trabajos y tareas", "icono": "bi-journal-text", "color": "#4a5a6a"},
 ]
 
 # Campos que jamás deben exponerse en un formulario genérico (contraseñas,
@@ -176,7 +176,7 @@ _CONFIGS: list[PanelModelConfig] = [
         modulo="academico",
         verbose_name="Grupo",
         verbose_name_plural="Grupos",
-        list_display=("__str__", "materia", "ciclo_escolar", "turno", "cupo_maximo", "activo"),
+        list_display=("__str__", "materia", "aula", "ciclo_escolar", "turno", "cupo_maximo", "activo"),
         list_filter=("ciclo_escolar", "turno", "activo"),
         search_fields=("clave", "materia__nombre", "materia__clave"),
         select_related=("materia", "ciclo_escolar"),
