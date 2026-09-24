@@ -30,7 +30,7 @@ FLUSH PRIVILEGES;
 ## 2. Clonar el repositorio y crear el entorno virtual
 
 ```bash
-sudo -u escolar git clone https://github.com/<tu-usuario>/<tu-repo>.git /var/www/escolar
+sudo -u escolar git clone https://github.com/evallardy/escolar.git /var/www/escolar
 cd /var/www/escolar
 sudo -u escolar python3 -m venv .venv
 sudo -u escolar .venv/bin/pip install --upgrade pip
