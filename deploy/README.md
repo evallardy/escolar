@@ -10,17 +10,18 @@ las rutas/usuario si tu servidor usa otra convención.
 
 ## 1. Preparar el servidor (una sola vez)
 
-Django 6.1 requiere **Python 3.12 o superior**. Verifica primero qué trae tu
-servidor:
+Django 5.2.x (la versión fijada por este proyecto para producción) es
+compatible con **Python 3.10+** y **MySQL 8.0+**. Ubuntu 22.04 normalmente ya
+trae Python 3.10 y MySQL 8.0, así que suele funcionar sin upgrades mayores.
+
+Verifica primero qué trae tu servidor:
 
 ```bash
 python3 --version
 ```
 
-Si es menor a 3.12 (común en Ubuntu 22.04/Debian 11 y anteriores), instala
-un Python 3.12 adicional sin reemplazar el del sistema (Ubuntu, vía
-deadsnakes; en Debian usa `pyenv` o compílalo desde fuente si no está en
-los repos):
+Si quieres usar Python 3.12 de todos modos (válido y recomendado aunque no es
+obligatorio), instálalo adicionalmente sin reemplazar el del sistema:
 
 ```bash
 sudo add-apt-repository ppa:deadsnakes/ppa
@@ -48,14 +49,20 @@ FLUSH PRIVILEGES;
 ```bash
 sudo -u escolar git clone https://github.com/evallardy/escolar.git /var/www/escolar
 cd /var/www/escolar
-sudo -u escolar python3.12 -m venv .venv
+sudo -u escolar python3 -m venv .venv
 sudo -u escolar .venv/bin/pip install --upgrade pip
 sudo -u escolar .venv/bin/pip install -r requirements-production.txt
 ```
 
-Si ves `ERROR: No matching distribution found for Django==6.1` al instalar,
-es casi siempre porque el venv se creó con un Python menor a 3.12: borra la
-carpeta `.venv` y créala de nuevo con `python3.12 -m venv .venv` como arriba.
+Si prefieres forzar Python 3.12, sustituye la línea del venv por:
+
+```bash
+sudo -u escolar python3.12 -m venv .venv
+```
+
+Si ves `django.db.utils.NotSupportedError: MySQL 8.4 or later is required`
+durante el despliegue, asegúrate de haber hecho `git pull origin main`: ese
+error viene de una versión vieja del repo que aún fijaba Django 6.1.
 
 ## 3. Configurar variables de entorno
 
