@@ -10,12 +10,28 @@ las rutas/usuario si tu servidor usa otra convención.
 
 ## 1. Preparar el servidor (una sola vez)
 
+Django 6.1 requiere **Python 3.12 o superior**. Verifica primero qué trae tu
+servidor:
+
+```bash
+python3 --version
+```
+
+Si es menor a 3.12 (común en Ubuntu 22.04/Debian 11 y anteriores), instala
+un Python 3.12 adicional sin reemplazar el del sistema (Ubuntu, vía
+deadsnakes; en Debian usa `pyenv` o compílalo desde fuente si no está en
+los repos):
+
+```bash
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install -y python3.12 python3.12-venv python3.12-dev
+```
+
 ```bash
 sudo adduser --system --group --home /var/www/escolar escolar
-sudo apt update
-sudo apt install -y python3-venv python3-dev build-essential \
-    default-libmysqlclient-dev pkg-config nginx supervisor certbot \
-    python3-certbot-nginx git mysql-server
+sudo apt install -y build-essential default-libmysqlclient-dev pkg-config \
+    nginx supervisor certbot python3-certbot-nginx git mysql-server
 ```
 
 Crea la base de datos y el usuario de MySQL para la app:
@@ -32,10 +48,14 @@ FLUSH PRIVILEGES;
 ```bash
 sudo -u escolar git clone https://github.com/evallardy/escolar.git /var/www/escolar
 cd /var/www/escolar
-sudo -u escolar python3 -m venv .venv
+sudo -u escolar python3.12 -m venv .venv
 sudo -u escolar .venv/bin/pip install --upgrade pip
 sudo -u escolar .venv/bin/pip install -r requirements-production.txt
 ```
+
+Si ves `ERROR: No matching distribution found for Django==6.1` al instalar,
+es casi siempre porque el venv se creó con un Python menor a 3.12: borra la
+carpeta `.venv` y créala de nuevo con `python3.12 -m venv .venv` como arriba.
 
 ## 3. Configurar variables de entorno
 
